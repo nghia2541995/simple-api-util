@@ -1,4 +1,4 @@
-import {kyOptionKeys, requestOptionsRegistry} from '../core/constants.js';
+import {apiUtilOptionKeys, requestOptionsRegistry} from '../core/constants.js';
 
 export const findUnknownOptions = (
 	request: Request,
@@ -7,7 +7,7 @@ export const findUnknownOptions = (
 	const unknownOptions: Record<string, unknown> = {};
 
 	for (const key in options) {
-		if (!(key in requestOptionsRegistry) && !(key in kyOptionKeys) && !(key in request)) {
+		if (!(key in requestOptionsRegistry) && !(key in apiUtilOptionKeys) && !(key in request)) {
 			unknownOptions[key] = options[key];
 		}
 	}

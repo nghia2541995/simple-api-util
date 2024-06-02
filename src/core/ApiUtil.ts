@@ -21,23 +21,23 @@ import {
 
 export class ApiUtil {
 	static create(input: Input, options: Options): ResponsePromise {
-		const ky = new ApiUtil(input, options);
+		const apiUtil = new ApiUtil(input, options);
 
 		const function_ = async (): Promise<Response> => {
-			if (typeof ky._options.timeout === 'number' && ky._options.timeout > maxSafeTimeout) {
+			if (typeof apiUtil._options.timeout === 'number' && apiUtil._options.timeout > maxSafeTimeout) {
 				throw new RangeError(`The \`timeout\` option cannot be greater than ${maxSafeTimeout}`);
 			}
 
 			// Delay the fetch so that body method shortcuts can set the Accept header
 			await Promise.resolve();
-			let response = await ky._fetch();
+			let response = await apiUtil._fetch();
 
-			for (const hook of ky._options.hooks.afterResponse) {
+			for (const hook of apiUtil._options.hooks.afterResponse) {
 				// eslint-disable-next-line no-await-in-loop
 				const modifiedResponse = await hook(
-					ky.request,
-					ky._options as NormalizedOptions,
-					ky._decorateResponse(response.clone()),
+					apiUtil.request,
+					apiUtil._options as NormalizedOptions,
+					apiUtil._decorateResponse(response.clone()),
 				);
 
 				if (modifiedResponse instanceof globalThis.Response) {
@@ -45,12 +45,12 @@ export class ApiUtil {
 				}
 			}
 
-			ky._decorateResponse(response);
+			apiUtil._decorateResponse(response);
 
-			if (!response.ok && ky._options.throwHttpErrors) {
-				let error = new HTTPError(response, ky.request, (ky._options as unknown) as NormalizedOptions);
+			if (!response.ok && apiUtil._options.throwHttpErrors) {
+				let error = new HTTPError(response, apiUtil.request, (apiUtil._options as unknown) as NormalizedOptions);
 
-				for (const hook of ky._options.hooks.beforeError) {
+				for (const hook of apiUtil._options.hooks.beforeError) {
 					// eslint-disable-next-line no-await-in-loop
 					error = await hook(error);
 				}
@@ -60,8 +60,8 @@ export class ApiUtil {
 
 			// If `onDownloadProgress` is passed, it uses the stream API internally
 			/* istanbul ignore next */
-			if (ky._options.onDownloadProgress) {
-				if (typeof ky._options.onDownloadProgress !== 'function') {
+			if (apiUtil._options.onDownloadProgress) {
+				if (typeof apiUtil._options.onDownloadProgress !== 'function') {
 					throw new TypeError('The `onDownloadProgress` option must be a function');
 				}
 
@@ -69,19 +69,19 @@ export class ApiUtil {
 					throw new Error('Streams are not supported in your environment. `ReadableStream` is missing.');
 				}
 
-				return ky._stream(response.clone(), ky._options.onDownloadProgress);
+				return apiUtil._stream(response.clone(), apiUtil._options.onDownloadProgress);
 			}
 
 			return response;
 		};
 
-		const isRetriableMethod = ky._options.retry.methods.includes(ky.request.method.toLowerCase());
-		const result = (isRetriableMethod ? ky._retry(function_) : function_()) as ResponsePromise;
+		const isRetriableMethod = apiUtil._options.retry.methods.includes(apiUtil.request.method.toLowerCase());
+		const result = (isRetriableMethod ? apiUtil._retry(function_) : function_()) as ResponsePromise;
 
 		for (const [type, mimeType] of Object.entries(responseTypes) as ObjectEntries<typeof responseTypes>) {
 			result[type] = async () => {
 				// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-				ky.request.headers.set('accept', ky.request.headers.get('accept') || mimeType);
+				apiUtil.request.headers.set('accept', apiUtil.request.headers.get('accept') || mimeType);
 
 				const awaitedResult = await result;
 				const response = awaitedResult.clone();

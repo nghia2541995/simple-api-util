@@ -1,3 +1,3 @@
-export type KyResponse = {
+export type ApiUtilResponse = {
 	json: <T = unknown>() => Promise<T>;
 } & Response;

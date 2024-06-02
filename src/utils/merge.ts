@@ -1,4 +1,4 @@
-import type {KyHeadersInit, Options} from '../types/options.js';
+import type {ApiUtilHeadersInit, Options} from '../types/options.js';
 import {isObject} from './is.js';
 
 export const validateAndMerge = (...sources: Array<Partial<Options> | undefined>): Partial<Options> => {
@@ -11,7 +11,7 @@ export const validateAndMerge = (...sources: Array<Partial<Options> | undefined>
 	return deepMerge({}, ...sources);
 };
 
-export const mergeHeaders = (source1: KyHeadersInit = {}, source2: KyHeadersInit = {}) => {
+export const mergeHeaders = (source1: ApiUtilHeadersInit = {}, source2: ApiUtilHeadersInit = {}) => {
 	const result = new globalThis.Headers(source1 as RequestInit['headers']);
 	const isHeadersInstance = source2 instanceof globalThis.Headers;
 	const source = new globalThis.Headers(source2 as RequestInit['headers']);

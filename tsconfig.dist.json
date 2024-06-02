@@ -3,10 +3,10 @@
 	"compilerOptions": {
 		"sourceMap": true,
 		"inlineSources": true,
-		"rootDir": "./source",
+		"rootDir": "./src",
 		"outDir": "./distribution"
 	},
 	"include": [
-		"source"
+		"src"
 	]
 }

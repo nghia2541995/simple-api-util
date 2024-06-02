@@ -1,5 +1,5 @@
 import type {Expect, Equal} from '@type-challenges/utils';
-import {type HttpMethod, type KyOptionsRegistry} from '../types/options.js';
+import {type HttpMethod, type ApiUtilOptionsRegistry} from '../types/options.js';
 import {type RequestInitRegistry} from '../types/request.js';
 
 export const supportsRequestStreams = (() => {
@@ -47,7 +47,7 @@ export const maxSafeTimeout = 2_147_483_647;
 
 export const stop = Symbol('stop');
 
-export const kyOptionKeys: KyOptionsRegistry = {
+export const apiUtilOptionKeys: ApiUtilOptionsRegistry = {
 	json: true,
 	parseJson: true,
 	stringifyJson: true,

@@ -10,9 +10,7 @@
 	"types": "./distribution/index.d.ts",
 	"sideEffects": false,
   "scripts": {
-		"test": "npm run build",
-		"debug": "PWDEBUG=1 ava --timeout=2m",
-		"build": "del-cli distribution && tsc --project tsconfig.dist.json",
+		"build": "tsc --project tsconfig.dist.json",
 		"prepare": "npm run build"
 	},
 	"files": [
@@ -59,6 +57,6 @@
 		"playwright": "^1.40.1",
 		"raw-body": "^2.5.2",
 		"tsx": "^4.7.0",
-		"typescript": "^5.2.2",
+		"typescript": "^5.2.2"
 	}
 }

@@ -1,6 +1,6 @@
 
 
-## Benefits over plain `fetch`
+## 🚀 Benefits over plain `simple-api-util`
 
 - Simpler API
 - Method shortcuts
@@ -12,15 +12,16 @@
 - Instances with custom defaults
 - Hooks
 
-## Install
+✔️✔️✔️ Implement from KY
+## ✔️ Install
 
 ```sh
-npm install 
+npm install simple-api-util
 ```
 
 
 
-## Usage
+## ✔️ Usage
 
 ```js
 import apiUtil from 'apiUtil';
@@ -54,17 +55,12 @@ console.log(json);
 //=> `{data: '🦄'}`
 ```
 
-If you are using [Deno](https://github.com/denoland/deno), import apiUtil from a URL. For example, using a CDN:
 
-```js
-import apiUtil from 'https://esm.sh/apiUtil';
-```
 
-## API
+
+## ✔️ API
 
 ### apiUtil(input, options?)
-
-
 ### apiUtil.get(input, options?)
 ### apiUtil.post(input, options?)
 ### apiUtil.put(input, options?)
@@ -74,7 +70,7 @@ import apiUtil from 'https://esm.sh/apiUtil';
 
 Sets `options.method` to the method name and makes a request.
 
-When using a [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) instance as `input`, any URL altering options (such as `prefixUrl`) will be ignored.
+
 
 #### options
 
@@ -94,14 +90,14 @@ Internally, the standard methods (`GET`, `POST`, `PUT`, `PATCH`, `HEAD` and `DEL
 ##### json
 
 
-##### searchParams
+##### ✔️ searchParams
 
 Type: `string | object<string, string | number | boolean> | Array<Array<string | number | boolean>> | URLSearchParams`\
 Default: `''`
 
 
 
-##### prefixUrl
+##### ✔️ prefixUrl
 
 Type: `string | URL`
 
@@ -111,7 +107,6 @@ Type: `string | URL`
 import apiUtil from 'apiUtil';
 
 // On https://example.com
-
 const response = await apiUtil('unicorn', {prefixUrl: '/api'});
 //=> 'https://example.com/api/unicorn'
 
@@ -121,7 +116,7 @@ const response2 = await apiUtil('unicorn', {prefixUrl: 'https://cats.com'});
 
 
 
-##### retry
+##### ✔️ retry
 
 Type: `object | number`\
 Default:
@@ -132,19 +127,7 @@ Default:
 - `backoffLimit`: `undefined`
 - `delay`: `attemptCount => 0.3 * (2 ** (attemptCount - 1)) * 1000`
 
-An object representing `limit`, `methods`, `statusCodes` and `maxRetryAfter` fields for maximum retry count, allowed methods, allowed status codes and maximum [`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After) time.
 
-If `retry` is a number, it will be used as `limit` and other defaults will remain in place.
-
-If `maxRetryAfter` is set to `undefined`, it will use `options.timeout`. If [`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After) header is greater than `maxRetryAfter`, it will cancel the request.
-
-The `backoffLimit` option is the upper limit of the delay per retry in milliseconds.
-To clamp the delay, set `backoffLimit` to 1000, for example.
-By default, the delay is calculated with `0.3 * (2 ** (attemptCount - 1)) * 1000`. The delay increases exponentially.
-
-The `delay` option can be used to change how the delay between retries is calculated. The function receives one parameter, the attempt count, starting at `1`.
-
-Retries are not triggered following a [timeout](#timeout).
 
 ```js
 import apiUtil from 'apiUtil';
@@ -159,15 +142,14 @@ const json = await apiUtil('https://example.com', {
 }).json();
 ```
 
-##### timeout
+##### ✔️ timeout
 
 Type: `number | false`\
 Default: `10000`
 
-Timeout in milliseconds for getting a response, including any retries. Can not be greater than 2147483647.
-If set to `false`, there will be no timeout.
 
-##### hooks
+
+##### ✔️ hooks
 
 Type: `object<string, Function[]>`\
 Default: `{beforeRequest: [], beforeRetry: [], afterResponse: []}`
@@ -197,7 +179,7 @@ const api = apiUtil.extend({
 const response = await api.get('https://example.com/api/users');
 ```
 
-###### hooks.beforeRetry
+###### ✔️ hooks.beforeRetry
 
 Type: `Function[]`\
 Default: `[]`
@@ -219,7 +201,7 @@ const response = await apiUtil('https://example.com', {
 });
 ```
 
-###### hooks.beforeError
+###### ✔️ hooks.beforeError
 
 Type: `Function[]`\
 Default: `[]`
@@ -246,7 +228,7 @@ await apiUtil('https://example.com', {
 });
 ```
 
-###### hooks.afterResponse
+###### ✔️ hooks.afterResponse
 
 Type: `Function[]`\
 Default: `[]`
@@ -284,14 +266,14 @@ const response = await apiUtil('https://example.com', {
 });
 ```
 
-##### throwHttpErrors
+##### ✔️ throwHttpErrors
 
 Type: `boolean`\
 Default: `true`
 
 
 
-##### onDownloadProgress
+##### ✔️ onDownloadProgress
 
 Type: `Function`
 
@@ -312,7 +294,7 @@ const response = await apiUtil('https://example.com', {
 });
 ```
 
-##### parseJson
+##### ✔️ parseJson
 
 Type: `Function`\
 Default: `JSON.parse()`
@@ -328,7 +310,7 @@ const json = await apiUtil('https://example.com', {
 }).json();
 ```
 
-##### stringifyJson
+##### ✔️ stringifyJson
 
 Type: `Function`\
 Default: `JSON.stringify()`
@@ -353,7 +335,7 @@ const json = await apiUtil('https://example.com', {
 }).json();
 ```
 
-##### fetch
+##### ✔️ fetch
 
 Type: `Function`\
 Default: `fetch`
@@ -398,25 +380,9 @@ console.log('unicorn' in response);
 //=> true
 ```
 
-### apiUtil.create(defaultOptions)
 
-Create a new apiUtil instance with complete new defaults.
 
-```js
-import apiUtil from 'apiUtil';
-
-// On https://my-site.com
-
-const api = apiUtil.create({prefixUrl: 'https://example.com/api'});
-
-const response = await api.get('users/123');
-//=> 'https://example.com/api/users/123'
-
-const response = await api.get('/status', {prefixUrl: ''});
-//=> 'https://my-site.com/status'
-```
-
-#### defaultOptions
+#### ✔️ defaultOptions
 
 Type: `object`
 
@@ -447,7 +413,7 @@ const response = await apiUtil.post('https://example.com', options);
 const text = await apiUtil('https://example.com', options).text();
 ```
 
-### HTTPError
+### ✔️ HTTPError
 
 
 
@@ -461,13 +427,13 @@ try {
 }
 ```
 
-### TimeoutError
+
 
 
 
 ## Tips
 
-### Sending form data
+### ✔️ Sending form data
 
 
 
@@ -494,7 +460,7 @@ searchParams.set('drink', 'icetea');
 const response = await apiUtil.post(url, {body: searchParams});
 ```
 
-### Setting a custom `Content-Type`
+### ✔️ Setting a custom `Content-Type`
 
 
 
@@ -514,7 +480,7 @@ console.log(json);
 //=> `{data: '🦄'}`
 ```
 
-### Cancellation
+### ✔️ Cancellation
 
 
 

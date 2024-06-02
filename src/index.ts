@@ -1,4 +1,3 @@
-/*! MIT License © Sindre Sorhus */
 
 import {ApiUtil} from './core/ApiUtil.js';
 import {requestMethods, stop} from './core/constants.js';
@@ -48,6 +47,6 @@ export type {
 } from './types/hooks.js';
 
 export type {ResponsePromise} from './types/ResponsePromise.js';
-export type {KyResponse} from './types/response.js';
+export type {ApiUtilResponse} from './types/response.js';
 export {HTTPError} from './errors/HTTPError.js';
 export {TimeoutError} from './errors/TimeoutError.js';

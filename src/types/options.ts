@@ -23,13 +23,13 @@ export type DownloadProgress = {
 };
 
 // Not HeadersInit directly because @types/node doesn't export it
-export type KyHeadersInit = NonNullable<RequestInit['headers']> | Record<string, string | undefined>;
+export type ApiUtilHeadersInit = NonNullable<RequestInit['headers']> | Record<string, string | undefined>;
 
 /**
-Custom Ky options
+Custom ApiUtil options
 */
 
-export type KyOptions = {
+export type ApiUtilOptions = {
 	/**
 	Shortcut for sending JSON. Use this instead of the `body` option.
 
@@ -48,10 +48,10 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 	import bourne from '@hapijs/bourne';
 
-	const json = await ky('https://example.com', {
+	const json = await ApiUtil('https://example.com', {
 		parseJson: text => bourne(text)
 	}).json();
 	```
@@ -68,10 +68,10 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 	import {DateTime} from 'luxon';
 
-	const json = await ky('https://example.com', {
+	const json = await ApiUtil('https://example.com', {
 		stringifyJson: data => JSON.stringify(data, (key, value) => {
 			if (key.endsWith('_at')) {
 				return DateTime.fromISO(value).toSeconds();
@@ -94,7 +94,7 @@ export type KyOptions = {
 	/**
 	A prefix to prepend to the `input` URL when making the request. It can be any valid URL, either relative or absolute. A trailing slash `/` is optional and will be added automatically, if needed, when it is joined with `input`. Only takes effect when `input` is a string. The `input` argument cannot start with a slash `/` when using this option.
 
-	Useful when used with [`ky.extend()`](#kyextenddefaultoptions) to create niche-specific Ky-instances.
+	Useful when used with [`ApiUtil.extend()`](#ApiUtilextenddefaultoptions) to create niche-specific ApiUtil-instances.
 
 	Notes:
 	 - After `prefixUrl` and `input` are joined, the result is resolved against the [base URL](https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI) of the page (if any).
@@ -102,14 +102,14 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 
 	// On https://example.com
 
-	const response = await ky('unicorn', {prefixUrl: '/api'});
+	const response = await ApiUtil('unicorn', {prefixUrl: '/api'});
 	//=> 'https://example.com/api/unicorn'
 
-	const response = await ky('unicorn', {prefixUrl: 'https://cats.com'});
+	const response = await ApiUtil('unicorn', {prefixUrl: 'https://cats.com'});
 	//=> 'https://cats.com/unicorn'
 	```
 	*/
@@ -128,9 +128,9 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 
-	const json = await ky('https://example.com', {
+	const json = await ApiUtil('https://example.com', {
 		retry: {
 			limit: 10,
 			methods: ['get'],
@@ -172,9 +172,9 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 
-	const response = await ky('https://example.com', {
+	const response = await ApiUtil('https://example.com', {
 		onDownloadProgress: (progress, chunk) => {
 			// Example output:
 			// `0% - 0 of 1271 bytes`
@@ -198,26 +198,26 @@ export type KyOptions = {
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 	import fetch from 'isomorphic-unfetch';
 
-	const json = await ky('https://example.com', {fetch}).json();
+	const json = await ApiUtil('https://example.com', {fetch}).json();
 	```
 	*/
 	fetch?: (input: Input, init?: RequestInit) => Promise<Response>;
 };
 
 /**
-Each key from KyOptions is present and set to `true`.
+Each key from ApiUtilOptions is present and set to `true`.
 
-This type is used for identifying and working with the known keys in KyOptions.
+This type is used for identifying and working with the known keys in ApiUtilOptions.
 */
-export type KyOptionsRegistry = {[K in keyof KyOptions]-?: true};
+export type ApiUtilOptionsRegistry = {[K in keyof ApiUtilOptions]-?: true};
 
 /**
-Options are the same as `window.fetch`, except for the KyOptions
+Options are the same as `window.fetch`, except for the ApiUtilOptions
 */
-export interface Options extends KyOptions, Omit<RequestInit, 'headers'> { // eslint-disable-line @typescript-eslint/consistent-type-definitions -- This must stay an interface so that it can be extended outside of Ky for use in `ky.create`.
+export interface Options extends ApiUtilOptions, Omit<RequestInit, 'headers'> { // eslint-disable-line @typescript-eslint/consistent-type-definitions -- This must stay an interface so that it can be extended outside of ApiUtil for use in `ApiUtil.create`.
 	/**
 	HTTP method used to make the request.
 
@@ -234,11 +234,11 @@ export interface Options extends KyOptions, Omit<RequestInit, 'headers'> { // es
 
 	@example
 	```
-	import ky from 'ky';
+	import ApiUtil from 'ApiUtil';
 
 	const url = 'https://sindresorhus.com';
 
-	const original = ky.create({
+	const original = ApiUtil.create({
 		headers: {
 			rainbow: 'rainbow',
 			unicorn: 'unicorn'
@@ -260,7 +260,7 @@ export interface Options extends KyOptions, Omit<RequestInit, 'headers'> { // es
 	//=> true
 	```
 	*/
-	headers?: KyHeadersInit;
+	headers?: ApiUtilHeadersInit;
 }
 
 export type InternalOptions = Required<
@@ -276,12 +276,12 @@ Omit<Options, 'hooks' | 'retry'>,
 /**
 Normalized options passed to the `fetch` call and the `beforeRequest` hooks.
 */
-export interface NormalizedOptions extends RequestInit { // eslint-disable-line @typescript-eslint/consistent-type-definitions -- This must stay an interface so that it can be extended outside of Ky for use in `ky.create`.
+export interface NormalizedOptions extends RequestInit { // eslint-disable-line @typescript-eslint/consistent-type-definitions -- This must stay an interface so that it can be extended outside of ApiUtil for use in `ApiUtil.create`.
 	// Extended from `RequestInit`, but ensured to be set (not optional).
 	method: NonNullable<RequestInit['method']>;
 	credentials?: NonNullable<RequestInit['credentials']>;
 
-	// Extended from custom `KyOptions`, but ensured to be set (not optional).
+	// Extended from custom `ApiUtilOptions`, but ensured to be set (not optional).
 	retry: RetryOptions;
 	prefixUrl: string;
 	onDownloadProgress: Options['onDownloadProgress'];
