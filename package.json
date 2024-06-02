@@ -1,0 +1,64 @@
+{
+  "name": "simple-api-utils",
+  "version": "1.0.0",
+  "description": "",
+  "exports": {
+		"types": "./distribution/index.d.ts",
+		"default": "./distribution/index.js"
+	},
+  "main": "./distribution/index.js",
+	"types": "./distribution/index.d.ts",
+	"sideEffects": false,
+  "scripts": {
+		"test": "npm run build",
+		"debug": "PWDEBUG=1 ava --timeout=2m",
+		"build": "del-cli distribution && tsc --project tsconfig.dist.json",
+		"prepare": "npm run build"
+	},
+	"files": [
+		"distribution"
+	],
+  "author": "",
+  "license": "ISC",
+  "keywords": [
+		"fetch",
+		"request",
+		"requests",
+		"http",
+		"https",
+		"fetching",
+		"get",
+		"url",
+		"curl",
+		"wget",
+		"net",
+		"network",
+		"ajax",
+		"api",
+		"rest",
+		"xhr",
+		"browser",
+		"got",
+		"axios",
+		"node-fetch"
+	],
+	"devDependencies": {
+		"@sindresorhus/tsconfig": "^4.0.0",
+		"@type-challenges/utils": "^0.1.1",
+		"@types/body-parser": "^1.19.2",
+		"@types/busboy": "^1.5.0",
+		"@types/express": "^4.17.17",
+		"@types/node": "^20.5.7",
+		"body-parser": "^1.20.2",
+		"busboy": "^1.6.0",
+		"del-cli": "^5.1.0",
+		"delay": "^6.0.0",
+		"expect-type": "^0.16.0",
+		"express": "^4.18.2",
+		"pify": "^6.1.0",
+		"playwright": "^1.40.1",
+		"raw-body": "^2.5.2",
+		"tsx": "^4.7.0",
+		"typescript": "^5.2.2",
+	}
+}
